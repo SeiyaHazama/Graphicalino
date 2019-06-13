@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="ja">
+  <head>
+    <meta charset="utf-8">
+    <title>Graphicaluino</title>
+    <link rel="stylesheet" href="./bootstrap4/css/bootstrap.css">
+    <style type="text/css">
+      body{
+        margin: 10px;
+      }
+    </style>
+  </head>
+  <body>
+    接続先：
+    <select class="form-control" id="ports">
+      <option selected disabled>接続先を指定</option>
+    </select>
+
+    <script src="./bootstrap4/js/bootstrap.js"></script>
+    <script src="./bootstrap4/js/jquery-3.2.1.js"></script>
+    <script src="./bootstrap4/js/popper.min.js"></script>
+    <script type="text/javascript">
+      const ipcRenderer = require("electron").ipcRenderer;
+      document.addEventListener('DOMContentLoaded', () => {
+        ipcRenderer.send('port', 'request');
+      });
+      ipcRenderer.on('port', (event, msg) => {
+        for (var i = 0; i < msg.length; i++) {
+          document.getElementById("ports").innerHTML += '<option value="' + msg.[i] + '">' + msg[i].comName;
+        }
+      });
+    </script>
+  </body>
+</html>
