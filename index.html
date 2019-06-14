@@ -26,7 +26,7 @@
       });
       ipcRenderer.on('port', (event, msg) => {
         for (var i = 0; i < msg.length; i++) {
-          document.getElementById("ports").innerHTML += '<option value="' + msg.[i] + '">' + msg[i].comName;
+          document.getElementById("ports").innerHTML += '<option value="' + msg[i].comName + '">' + msg[i].comName + '</option>';
         }
       });
     </script>
