@@ -11,10 +11,19 @@
     </style>
   </head>
   <body>
-    接続先：
-    <select class="form-control" id="ports">
-      <option selected disabled>接続先を指定</option>
-    </select>
+    <div class="form-row">
+      <label for="ports" class="col-form-label">接続先：</label>
+      <div class="col">
+        <select class="form-control" id="ports">
+          <option selected disabled>接続先を指定</option>
+        </select>
+      </div>
+      <div class="col">
+        <button type="button" class="btn btn-primary" name="button">
+          接続
+        </button>
+      </div>
+    </div>
 
     <script src="./bootstrap4/js/bootstrap.js"></script>
     <script src="./bootstrap4/js/jquery-3.2.1.js"></script>
