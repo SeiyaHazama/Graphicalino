@@ -40,13 +40,13 @@ ipcMain.on('connect', (event, msg) => {
       event.reply("err", err.message);
   });
 
-  conSerial.on('data', (data) => {
-    window.webContents.send('data', (new TextDecoder('utf-8')).decode(data));
+  const parser = conSerial.pipe(new Readline({delimiter: '\n'}));
+
+  parser.on('data', (data) => {
+    window.webContents.send('data', data);
   });
 
   conSerial.on('close', () => {
     console.log("closed");
-  })
-
-  conSerial.pipe(new Readline({delimiter: '\r\n'}));
+  });
 });
