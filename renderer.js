@@ -3,6 +3,15 @@ const portsElm = document.getElementById("ports");
 
 let conPort = "";
 let isConnected = false;
+let gageNum = 0;
+
+let g = new JustGage({
+  id: "gauge",
+  value: 0,
+  min: 0,
+  max: 1024,
+  title: "AnalogMeter"
+});
 
 document.addEventListener('DOMContentLoaded', () => {
   loadSerialPortList();
@@ -83,5 +92,22 @@ function receivedSerialData(data) {
       cvArray[i] = toArray[i];
     }
   }
-  console.log(cvArray);
+  dispSerialData(cvArray);
+}
+
+function dispSerialData(data) {
+  document.getElementById("tbltr").innerHTML = "";
+  document.getElementById("tblval").innerHTML = "";
+  document.getElementById("tblbtn").innerHTML = "";
+  for (var i = 0; i < data.length; i++) {
+    document.getElementById("tbltr").innerHTML += "<th scope='col'>Data" + (i + 1) + "</th>";
+    document.getElementById("tblval").innerHTML += "<td>" + data[i] + "</td>";
+    document.getElementById("tblbtn").innerHTML += "<td><button type='button' class='btn btn-info'>ゲージ切替</button></td>";
+  }
+  g.refresh(data[0]);
+  if (typeof data[0] != "number") {
+    document.getElementById("gaugeInfo").innerText = "Data" + data[0] + "はモニタできません。";
+  } else {
+    document.getElementById("gaugeInfo").innerText = "Data" + data[0] + "をモニタ中";
+  }
 }

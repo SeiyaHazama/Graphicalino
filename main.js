@@ -31,7 +31,6 @@ ipcMain.on('port', (event, msg) => {
 });
 
 ipcMain.on('connect', (event, msg) => {
-  console.log("received:" + msg);
   let conSerial = new serialport(msg, {
     baudRate: 115200,
   });
