@@ -19,7 +19,7 @@
         </select>
       </div>
       <div class="col-sm-1">
-        <button type="button" class="btn btn-primary" name="button" onclick="openSerial();">
+        <button type="button" id="conbtn" class="btn btn-primary" onclick="openSerial();">
           接続
         </button>
       </div>
@@ -38,20 +38,24 @@
         <tr id="tblval">
 
         </tr>
-        <tr id="tblbtn">
-
-        </tr>
       </tbody>
     </table>
-    <div id="gauge" style="width: 200px; height: 150px;">
+    <div class="form-row">
+      <label for="ports" class="col-form-label">アナログメータ：</label>
+      <div class="col-sm-3">
+        <select class="form-control" id="dataNo" disabled>
 
+        </select>
+      </div>
+      <div class="col-sm-1">
+        <button type="button" id="meterbtn" class="btn btn-info" onclick="openAnalogMeter();" disabled>
+          メータ起動
+        </button>
+      </div>
     </div>
-    <p id="gaugeInfo"></p>
     <script src="./bootstrap4/js/bootstrap.js"></script>
     <script src="./bootstrap4/js/jquery-3.2.1.js"></script>
     <script src="./bootstrap4/js/popper.min.js"></script>
-    <script src="./justgage-1.2.2/raphael-2.1.4.min.js"></script>
-    <script src="./justgage-1.2.2/justgage.js"></script>
     <script src="./renderer.js"></script>
   </body>
 </html>

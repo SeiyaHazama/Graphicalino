@@ -6,7 +6,7 @@ const app = electron.app;
 const BrowserWindow = electron.BrowserWindow;
 const ipcMain = electron.ipcMain;
 
-let window;
+let window, cldwindow, dataNo, isChild = false;
 
 function createwindow(){
   window = new BrowserWindow({
@@ -15,9 +15,30 @@ function createwindow(){
     webPreferences: {
       nodeIntegration: true
     }
-  })
+  });
   window.loadFile('index.html');
   window.webContents.openDevTools();
+}
+
+function createChildWindow() {
+  if (isChild) {
+    cldwindow.close();
+  }
+  cldwindow = new BrowserWindow({
+    parent: window,
+    minWidth: 200,
+    minHeight: 250,
+    maxWidth: 200,
+    maxHeight: 250,
+    webPreferences: {
+      nodeIntegration: true
+    }
+  });
+  cldwindow.loadFile("child.html");
+
+  cldwindow.on("closed", () => {
+    isChild = false;
+  });
 }
 
 app.on('ready', () => {
@@ -42,10 +63,20 @@ ipcMain.on('connect', (event, msg) => {
   const parser = conSerial.pipe(new Readline({delimiter: '\n'}));
 
   parser.on('data', (data) => {
+    if (isChild) {
+      let ary = data.split(",");
+      cldwindow.webContents.send('data', ary[dataNo]);
+    }
     window.webContents.send('data', data);
   });
 
   conSerial.on('close', () => {
     console.log("closed");
   });
+});
+
+ipcMain.on('meter', (event, msg) => {
+  dataNo = msg;
+  createChildWindow();
+  isChild = true;
 });

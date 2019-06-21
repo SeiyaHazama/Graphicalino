@@ -3,15 +3,7 @@ const portsElm = document.getElementById("ports");
 
 let conPort = "";
 let isConnected = false;
-let gageNum = 0;
-
-let g = new JustGage({
-  id: "gauge",
-  value: 0,
-  min: 0,
-  max: 1024,
-  title: "AnalogMeter"
-});
+let dataLength = 0;
 
 document.addEventListener('DOMContentLoaded', () => {
   loadSerialPortList();
@@ -44,6 +36,9 @@ ipcRenderer.on('err', (event, msg) => {
 
 ipcRenderer.on('data', (event, data) => {
   portsElm.disabled = true;
+  document.getElementById("conbtn").disabled = true;
+  document.getElementById("dataNo").disabled = false;
+  document.getElementById("meterbtn").disabled = false;
   isConnected = true;
   dispNotification("alert alert-success", "接続しました");
   receivedSerialData(data);
@@ -86,9 +81,8 @@ function receivedSerialData(data) {
   let toArray = data.split(",");
   let cvArray = [];
   for (var i = 0; i < toArray.length; i++) {
-    try {
-      cvArray[i] = Number(toArray[i]);
-    } catch (e) {
+    cvArray[i] = Number(toArray[i]);
+    if (isNaN(cvArray[i])) {
       cvArray[i] = toArray[i];
     }
   }
@@ -98,16 +92,19 @@ function receivedSerialData(data) {
 function dispSerialData(data) {
   document.getElementById("tbltr").innerHTML = "";
   document.getElementById("tblval").innerHTML = "";
-  document.getElementById("tblbtn").innerHTML = "";
+  if (data.length != dataLength) {
+    document.getElementById("dataNo").innerHTML = "";
+    for (var i = 0; i < data.length; i++) {
+      document.getElementById("dataNo").innerHTML += "<option value='" + i + "'>Data" + (i + 1) + "</option>";
+    }
+    dataLength = data.length;
+  }
   for (var i = 0; i < data.length; i++) {
     document.getElementById("tbltr").innerHTML += "<th scope='col'>Data" + (i + 1) + "</th>";
     document.getElementById("tblval").innerHTML += "<td>" + data[i] + "</td>";
-    document.getElementById("tblbtn").innerHTML += "<td><button type='button' class='btn btn-info'>ゲージ切替</button></td>";
   }
-  g.refresh(data[0]);
-  if (typeof data[0] != "number") {
-    document.getElementById("gaugeInfo").innerText = "Data" + data[0] + "はモニタできません。";
-  } else {
-    document.getElementById("gaugeInfo").innerText = "Data" + data[0] + "をモニタ中";
-  }
+}
+
+function openAnalogMeter() {
+  ipcRenderer.send("meter", document.getElementById("dataNo").value);
 }
