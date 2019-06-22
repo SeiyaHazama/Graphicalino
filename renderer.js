@@ -1,12 +1,17 @@
 const ipcRenderer = require("electron").ipcRenderer;
+const dialog = require("electron").remote.dialog;
 const portsElm = document.getElementById("ports");
 
 let conPort = "";
 let isConnected = false;
+let isRecord = false;
 let dataLength = 0;
+let saveDir = [process.env[process.platform == "win32" ? "USERPROFILE": "HOME"]];
 
 document.addEventListener('DOMContentLoaded', () => {
   loadSerialPortList();
+  ipcRenderer.send("dir", saveDir[0]);
+  document.getElementById("saveDirectroy").innerText = 'CSVファイルは"' + saveDir + '"に保存されます。';
 });
 
 ipcRenderer.on('port', (event, msg) => {
@@ -39,6 +44,8 @@ ipcRenderer.on('data', (event, data) => {
   document.getElementById("conbtn").disabled = true;
   document.getElementById("dataNo").disabled = false;
   document.getElementById("meterbtn").disabled = false;
+  document.getElementById("dirbtn").disabled = false;
+  document.getElementById("recbtn").disabled = false;
   isConnected = true;
   dispNotification("alert alert-success", "接続しました");
   receivedSerialData(data);
@@ -107,4 +114,29 @@ function dispSerialData(data) {
 
 function openAnalogMeter() {
   ipcRenderer.send("meter", document.getElementById("dataNo").value);
+}
+
+function openDiretoryDialog() {
+  saveDir = dialog.showOpenDialog({
+    properties: ["openDirectory"],
+    title: "CSV保存先を選択",
+    defaultPath: saveDir[0]
+  });
+  ipcRenderer.send("dir", saveDir[0]);
+  document.getElementById("saveDirectroy").innerText = 'CSVファイルは"' + saveDir[0] + '"に保存されます。';
+}
+
+function pressRecButton() {
+  let msg = "";
+  let label = "";
+  isRecord = !isRecord;
+  if (isRecord) {
+    msg = "start";
+    label = "記録を終了";
+  } else {
+    msg = "stop";
+    label = "記録を開始";
+  }
+  ipcRenderer.send("rec", msg);
+  document.getElementById("recbtn").innerText = label;
 }

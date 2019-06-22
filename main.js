@@ -6,7 +6,7 @@ const app = electron.app;
 const BrowserWindow = electron.BrowserWindow;
 const ipcMain = electron.ipcMain;
 
-let window, cldwindow, dataNo, isChild = false;
+let window, cldwindow, dataNo, isChild = false, isRecord = false, saveDir;
 
 function createwindow(){
   window = new BrowserWindow({
@@ -80,3 +80,17 @@ ipcMain.on('meter', (event, msg) => {
   createChildWindow();
   isChild = true;
 });
+
+ipcMain.on('dir', (event, msg) => {
+  saveDir = msg;
+  console.log(msg);
+});
+
+ipcMain.on('rec', (event, msg) => {
+  isRecord = !isRecord;
+  if (msg == "start") {
+    console.log('start', isRecord);
+  } else {
+    console.log('stop', isRecord);
+  }
+})
