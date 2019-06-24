@@ -4,6 +4,7 @@
     <meta charset="utf-8">
     <title>Graphicaluino</title>
     <link rel="stylesheet" href="./bootstrap4/css/bootstrap.css">
+    <link rel="stylesheet" href="./open-iconic-master/font/css/open-iconic-bootstrap.css">
     <style type="text/css">
       body{
         margin: 10px;
@@ -20,6 +21,7 @@
       </div>
       <div class="col-sm-1">
         <button type="button" id="conbtn" class="btn btn-primary" onclick="openSerial();">
+          <span class="oi oi-transfer"></span>
           接続
         </button>
       </div>
@@ -49,6 +51,7 @@
       </div>
       <div class="col-sm-1">
         <button type="button" id="meterbtn" class="btn btn-info" onclick="openAnalogMeter();" disabled>
+          <span class="oi oi-dashboard"></span>
           メータ起動
         </button>
       </div>
@@ -56,9 +59,11 @@
     <hr>
     <div id="saveDirectroy"></div>
     <button type="button" id="dirbtn" class="btn btn-info" onclick="openDiretoryDialog();" disabled>
+      <span class="oi oi-folder"></span>
       CSV保存先を変更
     </button>
     <button type="button" id="recbtn" class="btn btn-info" onclick="pressRecButton();" disabled>
+      <span class="oi oi-video"></span>
       記録を開始
     </button>
     <script src="./bootstrap4/js/bootstrap.js"></script>

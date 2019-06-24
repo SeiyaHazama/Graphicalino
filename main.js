@@ -27,9 +27,9 @@ function createChildWindow() {
   cldwindow = new BrowserWindow({
     parent: window,
     minWidth: 200,
-    minHeight: 250,
+    minHeight: 200,
     maxWidth: 200,
-    maxHeight: 250,
+    maxHeight: 200,
     webPreferences: {
       nodeIntegration: true
     }

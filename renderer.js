@@ -21,7 +21,7 @@ ipcRenderer.on('port', (event, msg) => {
     if (msg[i].manufacturer && msg[i].manufacturer.match("Arduino") && !flg) {
       portsElm.innerHTML += '<option selected value="' + msg[i].comName + '">' + msg[i].comName + '(Arduino)</option>';
       conPort = msg[i].comName;
-      dispNotification("alert alert-success", "Arduinoを自動検出しました。");
+      dispNotification("alert alert-success", "<span class='oi oi-circle-check'></span> Arduinoを自動検出しました。");
       flg = true;
     } else {
       portsElm.innerHTML += '<option value="' + msg[i].comName + '">' + msg[i].comName + '</option>';
@@ -29,12 +29,12 @@ ipcRenderer.on('port', (event, msg) => {
   }
   portsElm.innerHTML += '<option value="reload">ポートを更新</option>';
   if (!flg) {
-    dispNotification("alert alert-warning", "接続先が選択されていません");
+    dispNotification("alert alert-warning", "<span class='oi oi-circle-x'></span> 接続先が選択されていません");
   }
 });
 
 ipcRenderer.on('err', (event, msg) => {
-  dispNotification("alert alert-danger", "接続エラー：" + msg);
+  dispNotification("alert alert-danger", "<span class='oi oi-circle-x'></span> 接続エラー：" + msg);
   isConnected = false;
   portsElm.disabled = false;
 });
@@ -47,7 +47,7 @@ ipcRenderer.on('data', (event, data) => {
   document.getElementById("dirbtn").disabled = false;
   document.getElementById("recbtn").disabled = false;
   isConnected = true;
-  dispNotification("alert alert-success", "接続しました");
+  dispNotification("alert alert-success", "<span class='oi oi-circle-check'></span> 接続しました");
   receivedSerialData(data);
 });
 
@@ -70,11 +70,11 @@ function changedSelectPort() {
       break;
     case "none":
       conPort = "";
-      dispNotification("alert alert-warning", "接続先が選択されていません");
+      dispNotification("alert alert-warning", "<span class='oi oi-circle-x'></span> 接続先が選択されていません");
       break;
     default:
       conPort = document.getElementById("ports").value;
-      dispNotification("alert alert-primary", "Arduinoであることを確認し[接続]をクリックします");
+      dispNotification("alert alert-primary", "<span class='oi oi-info'></span> Arduinoであることを確認し[接続]をクリックします");
   }
 }
 
