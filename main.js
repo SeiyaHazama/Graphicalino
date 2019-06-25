@@ -1,12 +1,14 @@
 const electron = require('electron');
 const serialport = require('serialport');
 const Readline = require("@serialport/parser-readline");
+const fs = require('fs');
+const dateformat = require('dateformat');
 
 const app = electron.app;
 const BrowserWindow = electron.BrowserWindow;
 const ipcMain = electron.ipcMain;
 
-let window, cldwindow, dataNo, isChild = false, isRecord = false, saveDir;
+let window, cldwindow, dataNo, isChild = false, isRecord = false, saveDir, saveData;
 
 function createwindow(){
   window = new BrowserWindow({
@@ -63,9 +65,12 @@ ipcMain.on('connect', (event, msg) => {
   const parser = conSerial.pipe(new Readline({delimiter: '\n'}));
 
   parser.on('data', (data) => {
+    let ary = data.split(",");
     if (isChild) {
-      let ary = data.split(",");
       cldwindow.webContents.send('data', ary[dataNo]);
+    }
+    if (isRecord) {
+      fs.appendFileSync(saveDir + saveData, data);
     }
     window.webContents.send('data', data);
   });
@@ -89,7 +94,9 @@ ipcMain.on('dir', (event, msg) => {
 ipcMain.on('rec', (event, msg) => {
   isRecord = !isRecord;
   if (msg == "start") {
+    saveData = "/Gino_" + dateformat(Date.now(), ("yyyymmddHHMMss")) + ".csv";
     console.log('start', isRecord);
+    console.log(saveDir + saveData);
   } else {
     console.log('stop', isRecord);
   }

@@ -132,11 +132,13 @@ function pressRecButton() {
   isRecord = !isRecord;
   if (isRecord) {
     msg = "start";
-    label = "記録を終了";
+    label = "<span class='oi oi-video'></span> 記録を終了";
+    document.getElementById("progress").hidden = false;
   } else {
     msg = "stop";
-    label = "記録を開始";
+    label = "<span class='oi oi-video'></span> 記録を開始";
+    document.getElementById("progress").hidden = true;
   }
   ipcRenderer.send("rec", msg);
-  document.getElementById("recbtn").innerText = label;
+  document.getElementById("recbtn").innerHTML = label;
 }
