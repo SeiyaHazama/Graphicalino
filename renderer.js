@@ -1,3 +1,4 @@
+const shell = require('electron').shell;
 const ipcRenderer = require("electron").ipcRenderer;
 const dialog = require("electron").remote.dialog;
 const portsElm = document.getElementById("ports");
@@ -44,10 +45,11 @@ ipcRenderer.on('data', (event, data) => {
   document.getElementById("conbtn").disabled = true;
   document.getElementById("dataNo").disabled = false;
   document.getElementById("meterbtn").disabled = false;
-  document.getElementById("dirbtn").disabled = false;
   document.getElementById("recbtn").disabled = false;
-  isConnected = true;
-  dispNotification("alert alert-success", "<span class='oi oi-circle-check'></span> 接続しました");
+  if (!isConnected) {
+    dispNotification("alert alert-success", "<span class='oi oi-circle-check'></span> 接続しました");
+    isConnected = true;
+  }
   receivedSerialData(data);
 });
 
@@ -134,11 +136,17 @@ function pressRecButton() {
     msg = "start";
     label = "<span class='oi oi-video'></span> 記録を終了";
     document.getElementById("progress").hidden = false;
+    dispNotification("alert alert-primary", "<span class='oi oi-spreadsheet'></span> 指定ディレクトリに記録しています。")
   } else {
     msg = "stop";
     label = "<span class='oi oi-video'></span> 記録を開始";
     document.getElementById("progress").hidden = true;
+    dispNotification("alert alert-success", "<span class='oi oi-circle-check'></span> 記録が完了しました。");
   }
   ipcRenderer.send("rec", msg);
   document.getElementById("recbtn").innerHTML = label;
+}
+
+function openFiler() {
+  shell.openItem(saveDir[0]);
 }

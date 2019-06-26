@@ -12,8 +12,10 @@ let window, cldwindow, dataNo, isChild = false, isRecord = false, saveDir, saveD
 
 function createwindow(){
   window = new BrowserWindow({
-    minWidth: 1000,
-    minHeight: 600,
+    width: 900,
+    height: 500,
+    minWidth: 900,
+    minHeight: 500,
     webPreferences: {
       nodeIntegration: true
     }
@@ -76,7 +78,7 @@ ipcMain.on('connect', (event, msg) => {
   });
 
   conSerial.on('close', () => {
-    console.log("closed");
+    app.quit();
   });
 });
 
@@ -88,16 +90,11 @@ ipcMain.on('meter', (event, msg) => {
 
 ipcMain.on('dir', (event, msg) => {
   saveDir = msg;
-  console.log(msg);
 });
 
 ipcMain.on('rec', (event, msg) => {
   isRecord = !isRecord;
   if (msg == "start") {
     saveData = "/Gino_" + dateformat(Date.now(), ("yyyymmddHHMMss")) + ".csv";
-    console.log('start', isRecord);
-    console.log(saveDir + saveData);
-  } else {
-    console.log('stop', isRecord);
   }
 })
