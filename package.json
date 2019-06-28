@@ -1,5 +1,5 @@
 {
-  "name": "graphicaluino",
+  "name": "Graphicaluino",
   "version": "1.0.0",
   "description": "can graphical data of Arduino serial data and create csv file.",
   "main": "main.js",
@@ -20,6 +20,7 @@
   },
   "homepage": "https://github.com/SeiyaHazama/Graphicaluino#readme",
   "dependencies": {
+    "about-window": "^1.13.0",
     "dateformat": "^3.0.3",
     "serialport": "^7.1.5"
   },

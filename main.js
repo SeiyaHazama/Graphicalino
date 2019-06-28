@@ -1,10 +1,12 @@
 const electron = require('electron');
+const openAboutWindow = require("about-window").default;
 const serialport = require('serialport');
 const Readline = require("@serialport/parser-readline");
 const fs = require('fs');
 const dateformat = require('dateformat');
 
 const app = electron.app;
+const Menu = electron.Menu;
 const BrowserWindow = electron.BrowserWindow;
 const ipcMain = electron.ipcMain;
 
@@ -20,6 +22,24 @@ function createwindow(){
       nodeIntegration: true
     }
   });
+
+  const menuContents = [
+    {label: app.getName(), submenu: [
+      {label: "このアプリについて", click: () => {
+        openAboutWindow({
+          icon_path: (__dirname + "/icon.png"),
+          package_json_dir: __dirname,
+          win_options: {
+            autoHideMenuBar: true
+          }
+        });
+      }},
+      {label: "アプリを終了", role: "quit"}
+    ]}];
+
+  const menu = Menu.buildFromTemplate(menuContents);
+  Menu.setApplicationMenu(menu);
+
   window.loadFile('index.html');
   window.webContents.openDevTools();
 }
