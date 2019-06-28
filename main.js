@@ -29,6 +29,7 @@ function createwindow(){
         openAboutWindow({
           icon_path: (__dirname + "/icon.png"),
           package_json_dir: __dirname,
+          description: "Arduinoデータの観測、書き出しをサポートします。",
           win_options: {
             autoHideMenuBar: true
           }
