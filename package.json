@@ -1,5 +1,5 @@
 {
-  "name": "Graphicaluino",
+  "name": "Graphicalino",
   "version": "1.0.0",
   "description": "can graphical data of Arduino serial data and create csv file.",
   "main": "main.js",
@@ -8,7 +8,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/SeiyaHazama/Graphicaluino.git"
+    "url": "git+https://github.com/SeiyaHazama/Graphicalino.git"
   },
   "keywords": [
     "arduino"
@@ -16,9 +16,9 @@
   "author": "SeiyaHazama",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/SeiyaHazama/Graphicaluino/issues"
+    "url": "https://github.com/SeiyaHazama/Graphicalino/issues"
   },
-  "homepage": "https://github.com/SeiyaHazama/Graphicaluino#readme",
+  "homepage": "https://github.com/SeiyaHazama/Graphicalino#readme",
   "dependencies": {
     "about-window": "^1.13.0",
     "dateformat": "^3.0.3",
