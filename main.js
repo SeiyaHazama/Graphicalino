@@ -18,6 +18,7 @@ function createwindow(){
     height: 500,
     minWidth: 900,
     minHeight: 500,
+    fullscreenable: false,
     webPreferences: {
       nodeIntegration: true
     }
@@ -54,10 +55,13 @@ function createChildWindow() {
   }
   cldwindow = new BrowserWindow({
     parent: window,
+    width: 200,
+    height: 200,
     minWidth: 200,
     minHeight: 200,
     maxWidth: 200,
     maxHeight: 200,
+    fullscreenable: false,
     webPreferences: {
       nodeIntegration: true
     }
