@@ -27,7 +27,7 @@ function createwindow(){
     {label: app.getName(), submenu: [
       {label: "このアプリについて", click: () => {
         openAboutWindow({
-          icon_path: (__dirname + "/icon.png"),
+          icon_path: (__dirname + "/icon/icon.png"),
           package_json_dir: __dirname,
           description: "Arduinoデータの観測、書き出しをサポートします。",
           win_options: {
@@ -42,7 +42,10 @@ function createwindow(){
   Menu.setApplicationMenu(menu);
 
   window.loadFile('index.html');
-  window.webContents.openDevTools();
+
+  window.on("closed", () => {
+    window = null;
+  })
 }
 
 function createChildWindow() {
@@ -68,6 +71,18 @@ function createChildWindow() {
 
 app.on('ready', () => {
   createwindow();
+});
+
+app.on('window-all-closed', () => {
+  if (process.platform != 'darwin') {
+    app.quit();
+  }
+});
+
+app.on('activate', () => {
+  if (window == null) {
+    createwindow();
+  }
 });
 
 ipcMain.on('port', (event, msg) => {
