@@ -22,42 +22,10 @@ document.addEventListener('DOMContentLoaded', () => {
   saveDirElm.innerText = 'CSVファイルは"' + saveDir + '"に保存されます。';
 });
 
-ipcRenderer.on('port', (event, msg) => {
-  portsElm.innerHTML = "<option value='none'>接続先を選択</option>";
-  let flg = false;
-  for (var i = 0; i < msg.length; i++) {
-    if (msg[i].manufacturer && msg[i].manufacturer.match("Arduino") && !flg) {
-      portsElm.innerHTML += '<option selected value="' + msg[i].comName + '">' + msg[i].comName + '(Arduino)</option>';
-      conPort = msg[i].comName;
-      dispNotification("alert alert-success", "<span class='oi oi-circle-check'></span> Arduinoを自動検出しました。");
-      flg = true;
-    } else {
-      portsElm.innerHTML += '<option value="' + msg[i].comName + '">' + msg[i].comName + '</option>';
-    }
+window.addEventListener("keydown", (event) => {
+  if (event.keyCode == 32 && isConnected) {
+    pressRecButton();
   }
-  portsElm.innerHTML += '<option value="reload">ポートを更新</option>';
-  if (!flg) {
-    dispNotification("alert alert-warning", "<span class='oi oi-circle-x'></span> 接続先が選択されていません");
-  }
-});
-
-ipcRenderer.on('err', (event, msg) => {
-  dispNotification("alert alert-danger", "<span class='oi oi-circle-x'></span> 接続エラー：" + msg);
-  isConnected = false;
-  portsElm.disabled = false;
-});
-
-ipcRenderer.on('data', (event, data) => {
-  portsElm.disabled = true;
-  document.getElementById("conbtn").disabled = true;
-  dataNoElm.disabled = false;
-  document.getElementById("meterbtn").disabled = false;
-  recBtnElm.disabled = false;
-  if (!isConnected) {
-    dispNotification("alert alert-success", "<span class='oi oi-circle-check'></span> 接続しました");
-    isConnected = true;
-  }
-  receivedSerialData(data);
 });
 
 function dispNotification(cls, text) {
@@ -157,3 +125,41 @@ function pressRecButton() {
 function openFiler() {
   shell.openItem(saveDir[0]);
 }
+
+ipcRenderer.on('port', (event, msg) => {
+  portsElm.innerHTML = "<option value='none'>接続先を選択</option>";
+  let flg = false;
+  for (var i = 0; i < msg.length; i++) {
+    if (msg[i].manufacturer && msg[i].manufacturer.match("Arduino") && !flg) {
+      portsElm.innerHTML += '<option selected value="' + msg[i].comName + '">' + msg[i].comName + '(Arduino)</option>';
+      conPort = msg[i].comName;
+      dispNotification("alert alert-success", "<span class='oi oi-circle-check'></span> Arduinoを自動検出しました。");
+      flg = true;
+    } else {
+      portsElm.innerHTML += '<option value="' + msg[i].comName + '">' + msg[i].comName + '</option>';
+    }
+  }
+  portsElm.innerHTML += '<option value="reload">ポートを更新</option>';
+  if (!flg) {
+    dispNotification("alert alert-warning", "<span class='oi oi-circle-x'></span> 接続先が選択されていません");
+  }
+});
+
+ipcRenderer.on('err', (event, msg) => {
+  dispNotification("alert alert-danger", "<span class='oi oi-circle-x'></span> 接続エラー：" + msg);
+  isConnected = false;
+  portsElm.disabled = false;
+});
+
+ipcRenderer.on('data', (event, data) => {
+  portsElm.disabled = true;
+  document.getElementById("conbtn").disabled = true;
+  dataNoElm.disabled = false;
+  document.getElementById("meterbtn").disabled = false;
+  recBtnElm.disabled = false;
+  if (!isConnected) {
+    dispNotification("alert alert-success", "<span class='oi oi-circle-check'></span> 接続しました");
+    isConnected = true;
+  }
+  receivedSerialData(data);
+});
