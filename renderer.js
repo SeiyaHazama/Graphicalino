@@ -1,18 +1,25 @@
 const shell = require('electron').shell;
 const ipcRenderer = require("electron").ipcRenderer;
 const dialog = require("electron").remote.dialog;
+
 const portsElm = document.getElementById("ports");
+const dataNoElm = document.getElementById("dataNo");
+const recBtnElm = document.getElementById("recbtn");
+const saveDirElm = document.getElementById("saveDirectory");
+const notifElm = document.getElementById("notif");
+const tbltrElm = document.getElementById("tbltr");
+const tblvalElm = document.getElementById("tblval");
+const progressElm = document.getElementById("progress");
 
 let conPort = "";
-let isConnected = false;
-let isRecord = false;
+let isConnected = false, isRecord = false;
 let dataLength = 0;
 let saveDir = [process.env[process.platform == "win32" ? "USERPROFILE": "HOME"]];
 
 document.addEventListener('DOMContentLoaded', () => {
   loadSerialPortList();
   ipcRenderer.send("dir", saveDir[0]);
-  document.getElementById("saveDirectroy").innerText = 'CSVファイルは"' + saveDir + '"に保存されます。';
+  saveDirElm.innerText = 'CSVファイルは"' + saveDir + '"に保存されます。';
 });
 
 ipcRenderer.on('port', (event, msg) => {
@@ -43,9 +50,9 @@ ipcRenderer.on('err', (event, msg) => {
 ipcRenderer.on('data', (event, data) => {
   portsElm.disabled = true;
   document.getElementById("conbtn").disabled = true;
-  document.getElementById("dataNo").disabled = false;
+  dataNoElm.disabled = false;
   document.getElementById("meterbtn").disabled = false;
-  document.getElementById("recbtn").disabled = false;
+  recBtnElm.disabled = false;
   if (!isConnected) {
     dispNotification("alert alert-success", "<span class='oi oi-circle-check'></span> 接続しました");
     isConnected = true;
@@ -54,8 +61,8 @@ ipcRenderer.on('data', (event, data) => {
 });
 
 function dispNotification(cls, text) {
-  document.getElementById("notif").className = cls;
-  document.getElementById("notif").innerHTML = text;
+  notifElm.className = cls;
+  notifElm.innerHTML = text;
 }
 
 function loadSerialPortList() {
@@ -65,7 +72,7 @@ function loadSerialPortList() {
 }
 
 function changedSelectPort() {
-  switch (document.getElementById("ports").value) {
+  switch (portsElm.value) {
     case "reload":
       conPort = "";
       loadSerialPortList();
@@ -75,7 +82,7 @@ function changedSelectPort() {
       dispNotification("alert alert-warning", "<span class='oi oi-circle-x'></span> 接続先が選択されていません");
       break;
     default:
-      conPort = document.getElementById("ports").value;
+      conPort = portsElm.value;
       dispNotification("alert alert-primary", "<span class='oi oi-info'></span> Arduinoであることを確認し[接続]をクリックします");
   }
 }
@@ -99,23 +106,23 @@ function receivedSerialData(data) {
 }
 
 function dispSerialData(data) {
-  document.getElementById("tbltr").innerHTML = "";
-  document.getElementById("tblval").innerHTML = "";
+  tbltrElm.innerHTML = "";
+  tblvalElm.innerHTML = "";
   if (data.length != dataLength) {
-    document.getElementById("dataNo").innerHTML = "";
+    dataNoElm.innerHTML = "";
     for (var i = 0; i < data.length; i++) {
-      document.getElementById("dataNo").innerHTML += "<option value='" + i + "'>Data" + (i + 1) + "</option>";
+      dataNoElm.innerHTML += "<option value='" + i + "'>Data" + (i + 1) + "</option>";
     }
     dataLength = data.length;
   }
   for (var i = 0; i < data.length; i++) {
-    document.getElementById("tbltr").innerHTML += "<th scope='col'>Data" + (i + 1) + "</th>";
-    document.getElementById("tblval").innerHTML += "<td>" + data[i] + "</td>";
+    tbltrElm.innerHTML += "<th scope='col'>Data" + (i + 1) + "</th>";
+    tblvalElm.innerHTML += "<td>" + data[i] + "</td>";
   }
 }
 
 function openAnalogMeter() {
-  ipcRenderer.send("meter", document.getElementById("dataNo").value);
+  ipcRenderer.send("meter", dataNoElm.value);
 }
 
 function openDiretoryDialog() {
@@ -125,7 +132,7 @@ function openDiretoryDialog() {
     defaultPath: saveDir[0]
   });
   ipcRenderer.send("dir", saveDir[0]);
-  document.getElementById("saveDirectroy").innerText = 'CSVファイルは"' + saveDir[0] + '"に保存されます。';
+  saveDirElm.innerText = 'CSVファイルは"' + saveDir[0] + '"に保存されます。';
 }
 
 function pressRecButton() {
@@ -135,16 +142,16 @@ function pressRecButton() {
   if (isRecord) {
     msg = "start";
     label = "<span class='oi oi-video'></span> 記録を終了";
-    document.getElementById("progress").hidden = false;
+    progressElm.hidden = false;
     dispNotification("alert alert-primary", "<span class='oi oi-spreadsheet'></span> 指定ディレクトリに記録しています。")
   } else {
     msg = "stop";
     label = "<span class='oi oi-video'></span> 記録を開始";
-    document.getElementById("progress").hidden = true;
+    progressElm.hidden = true;
     dispNotification("alert alert-success", "<span class='oi oi-circle-check'></span> 記録が完了しました。");
   }
   ipcRenderer.send("rec", msg);
-  document.getElementById("recbtn").innerHTML = label;
+  recBtnElm.innerHTML = label;
 }
 
 function openFiler() {

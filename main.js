@@ -10,10 +10,13 @@ const Menu = electron.Menu;
 const BrowserWindow = electron.BrowserWindow;
 const ipcMain = electron.ipcMain;
 
-let window, cldwindow, dataNo, isChild = false, isRecord = false, saveDir, saveData;
+let mainWindow, cldWindow;
+let dataNo
+let isChild = false, isRecord = false;
+let saveDir, fileName;
 
-function createwindow(){
-  window = new BrowserWindow({
+function createMainWindow(){
+  mainWindow = new BrowserWindow({
     width: 900,
     height: 500,
     minWidth: 900,
@@ -43,19 +46,19 @@ function createwindow(){
   const menu = Menu.buildFromTemplate(menuContents);
   Menu.setApplicationMenu(menu);
 
-  window.loadFile('index.html');
+  mainWindow.loadFile('index.html');
 
-  window.on("closed", () => {
-    window = null;
+  mainWindow.on("closed", () => {
+    mainWindow = null;
   })
 }
 
 function createChildWindow() {
   if (isChild) {
-    cldwindow.close();
+    cldWindow.close();
   }
-  cldwindow = new BrowserWindow({
-    parent: window,
+  cldWindow = new BrowserWindow({
+    parent: mainWindow,
     width: 200,
     height: 200,
     minWidth: 200,
@@ -67,27 +70,15 @@ function createChildWindow() {
       nodeIntegration: true
     }
   });
-  cldwindow.loadFile("child.html");
+  cldWindow.loadFile("child.html");
 
-  cldwindow.on("closed", () => {
+  cldWindow.on("closed", () => {
     isChild = false;
   });
 }
 
 app.on('ready', () => {
-  createwindow();
-});
-
-app.on('window-all-closed', () => {
-  if (process.platform != 'darwin') {
-    app.quit();
-  }
-});
-
-app.on('activate', () => {
-  if (window == null) {
-    createwindow();
-  }
+  createMainWindow();
 });
 
 ipcMain.on('port', (event, msg) => {
@@ -110,12 +101,12 @@ ipcMain.on('connect', (event, msg) => {
   parser.on('data', (data) => {
     let ary = data.split(",");
     if (isChild) {
-      cldwindow.webContents.send('data', ary[dataNo]);
+      cldWindow.webContents.send('data', ary[dataNo]);
     }
     if (isRecord) {
-      fs.appendFileSync(saveDir + saveData, data);
+      fs.appendFileSync(saveDir + fileName, data);
     }
-    window.webContents.send('data', data);
+    mainWindow.webContents.send('data', data);
   });
 
   conSerial.on('close', () => {
@@ -136,6 +127,18 @@ ipcMain.on('dir', (event, msg) => {
 ipcMain.on('rec', (event, msg) => {
   isRecord = !isRecord;
   if (msg == "start") {
-    saveData = "/Gino_" + dateformat(Date.now(), ("yyyymmddHHMMss")) + ".csv";
+    fileName = "/Gino_" + dateformat(Date.now(), ("yyyymmddHHMMss")) + ".csv";
   }
-})
+});
+
+app.on('activate', () => {
+  if (mainWindow == null) {
+    createMainWindow();
+  }
+});
+
+app.on('window-all-closed', () => {
+  if (process.platform != 'darwin') {
+    app.quit();
+  }
+});
