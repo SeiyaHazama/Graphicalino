@@ -1,7 +1,7 @@
 Graphicalino
 ===
 
-Can graphical data of Arduino serial data and create CSV file.
+You Can graphical data of Arduino serial data and create CSV file.
 
 ## Description
 
@@ -54,7 +54,7 @@ electron .
 |[justgage-1.2.2](http://justgage.com/)|Create gauge.
 |[seialport](https://serialport.io/)|Connect Arduino.
 
-Thankyou.
+Thank you.
 
 ## License
 
