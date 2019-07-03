@@ -1,7 +1,7 @@
 {
   "name": "Graphicalino",
   "version": "1.0.0",
-  "description": "can graphical data of Arduino serial data and create csv file.",
+  "description": "You can graphical data of Arduino serial data and create csv file.",
   "main": "main.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
