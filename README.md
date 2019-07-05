@@ -1,12 +1,12 @@
 Graphicalino
 ===
 
-You Can graphical data of Arduino serial data and create CSV file.
+You can observation graphically of Arduino serial data and export for CSV file.
 
 ## Description
 
-Graphicalino is tool for see graphical of Arduino serial data. Usually, think everyone use serial monitor of Arduino IDE or simple tool of you made, when everyone see serial data.
-Serial monitor of Arduino IDE is very easy for see data. But, serial monitor is can't export to CSV data.
+Graphicalino is tool for observation graphically of Arduino serial data. Usually, think everyone use serial monitor of Arduino IDE or simple tool of you made, when everyone observation serial data.
+Serial monitor of Arduino IDE is very easy for observation of data. But, serial monitor is can't export to CSV data.
 Simple tool for like run at terminal is can export CSV data. But, develop tool is diffical for begginer.
 Therefor, I develop Graphicalino. Graphicalino is easy operate and can export CSV data.
 
