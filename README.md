@@ -20,7 +20,17 @@ If i have time, I schedule add a little more function.
 
 ## Rule of serial data format
 
-Serial data is must split of comma. For example, when send data is 2 pieces, please format for serial data to `<data1>,<data2>`.
+Serial data is must split of comma. For example, when send data is 2 pieces, please format for serial data to like under.
+
+```
+<data1>,<data2>
+```
+
+And please add new line code `¥n` at end. If sender is Arduino, code of send serial data is ok at under.
+
+```
+Serial.println(...);
+```
 
 ## Installation
 
