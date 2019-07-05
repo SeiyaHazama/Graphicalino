@@ -1,4 +1,4 @@
-Graphicalino
+Graphicalino <img src="./icon/icon.png" width="70">
 ===
 
 ![https://opensource.org/licenses/MIT](https://img.shields.io/badge/license-MIT-green.svg)
