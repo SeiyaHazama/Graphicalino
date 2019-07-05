@@ -36,6 +36,8 @@ Serial.println(...);
 
 Please access download page.
 
+You can download application for macOS. For Linux and Windows is not prepared now (I want to prepared someday). Because I don't have environment of build for Windows and Linux. If youn want this software, you can packaging from this repository.
+
 ### Language
 
 Japanese
